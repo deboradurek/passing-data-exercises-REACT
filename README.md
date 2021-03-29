@@ -6,65 +6,90 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### `yarn start`
+`yarn start`
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+The page will reload if you make edits, and you will also see any lint errors in the console.
 
-### `yarn test`
+# Exercise 1: `passing-data-1`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This exercise uses React and data to display a list of users alongside their favorite movies.\
+One of the list items might look like this:
 
-### `yarn build`
+_"Jane Cruz's favorite movie is Planet Earth 1."_
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Solution 1
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This solution is shown in the **Solution1-SingleComponent.js** file, and is the simpliest solution.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- It uses the _profiles_ array, and _users_ and _movies_ objects all in the same file.
+- There are no imports, no other components and no props added.
 
-### `yarn eject`
+```
+class App extends Component {
+ render() {
+   return (
+     <div>
+       <h2>Favorite Movies</h2>
+       <ul>
+         {profiles.map((profile) => {
+           const usersName = users[profile.userID].name;
+           const movieName = movies[profile.favoriteMovieID].name;
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+           return (
+             <li key={profile.id}>
+               <p>{`${usersName}'s favorite movie is ${movieName}.`}</p>
+             </li>
+           );
+         })}
+       </ul>
+     </div>
+   );
+ }
+}
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Solution 2
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+This solution is the one used as default to run the program.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- It uses the _profiles_ array, and _users_ and _movies_ objects all as props in the component element.
+- It uses the import of _FavoriteMovieByPerson.js_ for the main external component.
 
-## Learn More
+```
+class FavoriteMovieByPerson extends Component {
+  render() {
+    const { profiles, users, movies } = this.props;
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    return (
+      <ul>
+        {profiles.map((profile) => {
+          const usersName = users[profile.userID].name;
+          const movieName = movies[profile.favoriteMovieID].name;
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+          return (
+            <li key={profile.id}>
+              <p>{`${usersName}'s favorite movie is ${movieName}.`}</p>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+}
+```
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <h2>Favorite Movies</h2>
+        <FavoriteMovieByPerson profiles={profiles} users={users} movies={movies} />
+      </div>
+    );
+  }
+}
+```

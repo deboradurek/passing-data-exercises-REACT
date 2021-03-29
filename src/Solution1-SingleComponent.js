@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import FavoriteMovieByPerson from './FavoriteMovieByPerson';
 
 /* Instructions
 // Use React and the data below to display a list of users alongside their favorite movies.
@@ -107,7 +106,18 @@ class App extends Component {
     return (
       <div>
         <h2>Favorite Movies</h2>
-        <FavoriteMovieByPerson profiles={profiles} users={users} movies={movies} />
+        <ul>
+          {profiles.map((profile) => {
+            const usersName = users[profile.userID].name;
+            const movieName = movies[profile.favoriteMovieID].name;
+
+            return (
+              <li key={profile.id}>
+                <p>{`${usersName}'s favorite movie is ${movieName}.`}</p>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     );
   }
