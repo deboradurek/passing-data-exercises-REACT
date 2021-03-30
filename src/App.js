@@ -1,10 +1,37 @@
 import React, { Component } from 'react';
-import FavoriteMovieByPerson from './FavoriteMovieByPerson';
+import FavoritedMovies from './FavoritedMovies';
+// import FavoriteMovieByPerson from './FavoriteMovieByPerson';
 
-/* Instructions
+/* Instructions for Exercise A:
+
 // Use React and the data below to display a list of users alongside their favorite movies.
 // One of the list items might look like this:
 // "Jane Cruz's favorite movie is Planet Earth 1."
+*/
+
+/* Instructions for Exercise B:
+
+// Instead of displaying a list of users and their movies, this time you need to display a list of movies.
+// For each movie in the list, there are two options:
+
+1. If the movie has been favorited, then display a list of all of the users who said that this movie was their favorite.
+2. If the movie has *not* been favorited, display some text stating that no one favorited the movie.
+
+// The solution might be composed like this:
+```
+<h2>Forrest Gump</h2>
+<p>Liked By:</p>
+<ul>
+  <li>Nicholas Lain</li>
+</ul>
+
+<h2>Get Out</h2>
+<p>Liked By:</p>
+<ul>
+  <li>John Doe</li>
+  <li>Autumn Green</li>
+</ul>
+```
 */
 
 /* Start
@@ -99,18 +126,49 @@ const movies = {
   },
 };
 
-/* End
-// Data */
+/* End */
+
+/* Start
+// EXERCISE A - SOLUTION 2 */
+
+// class App extends Component {
+//   render() {
+//     return (
+//       <div>
+//         <h2>Favorite Movies</h2>
+//         <FavoriteMovieByPerson profiles={profiles} users={users} movies={movies} />
+//       </div>
+//     );
+//   }
+// }
+
+/* End */
+
+/* Start
+// EXERCISE B - SOLUTION 1 */
+
+const initialValue = Object.values(movies).reduce((acc, { name }) => {
+  return { ...acc, [name]: [] };
+}, {});
+
+const movieByUser = profiles.reduce((acc, profile) => {
+  const usersName = users[profile.userID].name;
+  const movieName = movies[profile.favoriteMovieID].name;
+  acc[movieName] = [...acc[movieName], usersName];
+  return acc;
+}, initialValue);
 
 class App extends Component {
   render() {
     return (
       <div>
-        <h2>Favorite Movies</h2>
-        <FavoriteMovieByPerson profiles={profiles} users={users} movies={movies} />
+        <h2>How Popular is Your Favorite Movie?</h2>
+        <FavoritedMovies movieByUser={movieByUser} />
       </div>
     );
   }
 }
+
+/* End */
 
 export default App;
