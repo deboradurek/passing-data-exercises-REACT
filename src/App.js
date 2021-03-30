@@ -147,23 +147,28 @@ const movies = {
 /* Start
 // EXERCISE B - SOLUTION 1 */
 
-const initialValue = Object.values(movies).reduce((acc, { name }) => {
-  return { ...acc, [name]: [] };
-}, {});
-
-const movieByUser = profiles.reduce((acc, profile) => {
-  const usersName = users[profile.userID].name;
-  const movieName = movies[profile.favoriteMovieID].name;
-  acc[movieName] = [...acc[movieName], usersName];
-  return acc;
-}, initialValue);
-
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.movieByUser = {};
+
+    const initialValue = Object.values(movies).reduce((acc, { name }) => {
+      return { ...acc, [name]: [] };
+    }, {});
+
+    this.movieByUser = profiles.reduce((acc, profile) => {
+      const usersName = users[profile.userID].name;
+      const movieName = movies[profile.favoriteMovieID].name;
+      acc[movieName] = [...acc[movieName], usersName];
+      return acc;
+    }, initialValue);
+  }
+
   render() {
     return (
       <div>
         <h2>How Popular is Your Favorite Movie?</h2>
-        <FavoritedMovies movieByUser={movieByUser} />
+        <FavoritedMovies movieByUser={this.movieByUser} />
       </div>
     );
   }

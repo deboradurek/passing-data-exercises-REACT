@@ -116,31 +116,35 @@ For each movie in the list, there are two options:
 This solution is the one used as default to run the program.
 
 - It uses the _movieByUser_ new array as prop in the component element.
-- The _profiles_ array, and _users_ and _movies_ objects are used for tranforming data and
-  storing new global variables.
-- It uses the import of _FavoritedMovies.js_ for the main external component.
+- It uses the constructor method inside the App component.
+- It uses the import of _FavoritedMovies.js_ and _UsersList.js_ as external components.
 
 ```
 /* Start
 // EXERCISE B - SOLUTION 1 */
 
-const initialValue = Object.values(movies).reduce((acc, { name }) => {
-  return { ...acc, [name]: [] };
-}, {});
-
-const movieByUser = profiles.reduce((acc, profile) => {
-  const usersName = users[profile.userID].name;
-  const movieName = movies[profile.favoriteMovieID].name;
-  acc[movieName] = [...acc[movieName], usersName];
-  return acc;
-}, initialValue);
-
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.movieByUser = {};
+
+    const initialValue = Object.values(movies).reduce((acc, { name }) => {
+      return { ...acc, [name]: [] };
+    }, {});
+
+    this.movieByUser = profiles.reduce((acc, profile) => {
+      const usersName = users[profile.userID].name;
+      const movieName = movies[profile.favoriteMovieID].name;
+      acc[movieName] = [...acc[movieName], usersName];
+      return acc;
+    }, initialValue);
+  }
+
   render() {
     return (
       <div>
         <h2>How Popular is Your Favorite Movie?</h2>
-        <FavoritedMovies movieByUser={movieByUser} />
+        <FavoritedMovies movieByUser={this.movieByUser} />
       </div>
     );
   }
